@@ -137,8 +137,38 @@ body {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #000;
   border: 2px solid #fff;
+  background-color: #080808;
+  background-image:
+    linear-gradient(45deg, #0d0d0d 25%, transparent 25%),
+    linear-gradient(-45deg, #0d0d0d 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #0d0d0d 75%),
+    linear-gradient(-45deg, transparent 75%, #0d0d0d 75%);
+  background-size: 96px 96px;
+  background-position:
+    0 0,
+    0 48px,
+    48px -48px,
+    -48px 0px;
+  animation: idleDiamondBg 18s linear infinite;
+}
+
+@keyframes idleDiamondBg {
+  from {
+    background-position:
+      0 0,
+      0 48px,
+      48px -48px,
+      -48px 0px;
+  }
+
+  to {
+    background-position:
+      -96px -96px,
+      -96px -48px,
+      -48px -144px,
+      -144px -96px;
+  }
 }
 
 .cat-motion {
@@ -148,8 +178,7 @@ body {
   place-items: center;
 }
 
-#cat,
-#pixelCanvas {
+#cat {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -158,7 +187,11 @@ body {
 
 #pixelCanvas {
   display: none;
+  max-width: 100%;
+  max-height: 100%;
   image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform-origin: center;
 }
 
 .pixel-mode #cat {
@@ -331,6 +364,7 @@ const cats = [
 ];
 
 const cat = document.getElementById("cat");
+const catFrame = document.getElementById("catFrame");
 const motion = document.getElementById("catMotion");
 const pixelCanvas = document.getElementById("pixelCanvas");
 const pixelCtx = pixelCanvas.getContext("2d");
@@ -340,6 +374,8 @@ let currentMotion = "";
 let pixelOn = false;
 let pixelLoop = null;
 let pixelStart = 0;
+let tempCanvas = document.createElement("canvas");
+let tempCtx = tempCanvas.getContext("2d");
 
 function cleanText(value) {
   if (!value) return "";
@@ -359,6 +395,10 @@ function randomCat() {
   cat.crossOrigin = "anonymous";
   cat.src = pick;
 }
+
+cat.addEventListener("load", () => {
+  if (pixelOn) startPixelLoop();
+});
 
 function setMotion(effect) {
   motion.classList.remove("bounce", "spin");
@@ -388,6 +428,18 @@ function togglePixel() {
   }
 }
 
+function getContainedSize() {
+  const frame = catFrame.getBoundingClientRect();
+  const naturalW = cat.naturalWidth || frame.width;
+  const naturalH = cat.naturalHeight || frame.height;
+
+  const scale = Math.min(frame.width / naturalW, frame.height / naturalH);
+  const displayW = Math.max(1, Math.round(naturalW * scale));
+  const displayH = Math.max(1, Math.round(naturalH * scale));
+
+  return { displayW, displayH };
+}
+
 function startPixelLoop() {
   stopPixelLoop();
   pixelStart = performance.now();
@@ -395,29 +447,47 @@ function startPixelLoop() {
   function draw(now) {
     if (!pixelOn) return;
 
-    const frame = cat.getBoundingClientRect();
+    if (!cat.complete || !cat.naturalWidth || !cat.naturalHeight) {
+      pixelLoop = requestAnimationFrame(draw);
+      return;
+    }
+
+    const { displayW, displayH } = getContainedSize();
+    const dpr = window.devicePixelRatio || 1;
+
+    pixelCanvas.style.width = `${displayW}px`;
+    pixelCanvas.style.height = `${displayH}px`;
+    pixelCanvas.width = Math.round(displayW * dpr);
+    pixelCanvas.height = Math.round(displayH * dpr);
+
     const wave = (Math.sin((now - pixelStart) / 450) + 1) / 2;
-    const pixelSize = Math.round(10 + wave * 38);
+    const pixelSize = Math.round(8 + wave * 34);
 
-    const lowW = Math.max(8, Math.round(frame.width / pixelSize));
-    const lowH = Math.max(8, Math.round(frame.height / pixelSize));
+    const lowW = Math.max(6, Math.round(displayW / pixelSize));
+    const lowH = Math.max(6, Math.round(displayH / pixelSize));
 
-    pixelCanvas.width = frame.width;
-    pixelCanvas.height = frame.height;
+    tempCanvas.width = lowW;
+    tempCanvas.height = lowH;
 
     pixelCtx.imageSmoothingEnabled = false;
-    pixelCtx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
-
-    const temp = document.createElement("canvas");
-    temp.width = lowW;
-    temp.height = lowH;
-
-    const tempCtx = temp.getContext("2d");
     tempCtx.imageSmoothingEnabled = false;
+
+    pixelCtx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
+    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
 
     try {
       tempCtx.drawImage(cat, 0, 0, lowW, lowH);
-      pixelCtx.drawImage(temp, 0, 0, lowW, lowH, 0, 0, pixelCanvas.width, pixelCanvas.height);
+      pixelCtx.drawImage(
+        tempCanvas,
+        0,
+        0,
+        lowW,
+        lowH,
+        0,
+        0,
+        pixelCanvas.width,
+        pixelCanvas.height
+      );
     } catch (error) {
       pixelOn = false;
       motion.classList.remove("pixel-mode");
@@ -444,8 +514,13 @@ function resetEffects() {
   pixelCanvas.className = "";
   currentMotion = "";
   pixelOn = false;
+  pixelCanvas.removeAttribute("style");
   stopPixelLoop();
 }
+
+window.addEventListener("resize", () => {
+  if (pixelOn) startPixelLoop();
+});
 
 randomCat();
 </script>
