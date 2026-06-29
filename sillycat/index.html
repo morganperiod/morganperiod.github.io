@@ -22,7 +22,9 @@ body {
   width: 100vw;
   min-height: 100dvh;
   overflow: hidden;
-  padding: 10px;
+  padding: 18px;
+  display: grid;
+  place-items: center;
   font-family: "Tiny5", monospace;
   background-color: #050517;
   background-image:
@@ -37,52 +39,36 @@ body {
   to { background-position: 0 900px, 0 0; }
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255,255,255,.06) 0,
-    rgba(255,255,255,.06) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  opacity: .4;
-}
-
 .window {
-  width: calc(100vw - 20px);
-  height: calc(100dvh - 20px);
+  width: min(88vw, 980px);
+  height: min(82dvh, 760px);
   display: flex;
   flex-direction: column;
   background: #c0c0c0;
   border: 3px solid #000;
-  box-shadow: 6px 6px 0 #000, 11px 11px 0 #ff00ff;
+  box-shadow: 7px 7px 0 #000, 13px 13px 0 #ff00ff;
   animation: rgbShadow 3s steps(1) infinite;
 }
 
 @keyframes rgbShadow {
-  0% { box-shadow: 6px 6px 0 #000, 11px 11px 0 #ff00ff; }
-  25% { box-shadow: 6px 6px 0 #000, 11px 11px 0 #00ffff; }
-  50% { box-shadow: 6px 6px 0 #000, 11px 11px 0 #ffff00; }
-  75% { box-shadow: 6px 6px 0 #000, 11px 11px 0 #00ff66; }
-  100% { box-shadow: 6px 6px 0 #000, 11px 11px 0 #ff00ff; }
+  0% { box-shadow: 7px 7px 0 #000, 13px 13px 0 #ff00ff; }
+  25% { box-shadow: 7px 7px 0 #000, 13px 13px 0 #00ffff; }
+  50% { box-shadow: 7px 7px 0 #000, 13px 13px 0 #ffff00; }
+  75% { box-shadow: 7px 7px 0 #000, 13px 13px 0 #00ff66; }
+  100% { box-shadow: 7px 7px 0 #000, 13px 13px 0 #ff00ff; }
 }
 
 .titlebar {
-  height: 38px;
+  height: 36px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
   padding: 4px 7px 4px 10px;
   color: white;
   background: linear-gradient(90deg, #001b83, #7b00ff, #ff8a00);
   border-bottom: 3px solid #000;
-  font-size: clamp(1rem, 4vw, 1.5rem);
+  font-size: clamp(1rem, 3vw, 1.35rem);
   text-shadow: 2px 2px #000;
 }
 
@@ -99,8 +85,8 @@ body::before {
 }
 
 .win-btn {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   display: grid;
   place-items: center;
   background: #c0c0c0;
@@ -115,7 +101,7 @@ body::before {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: clamp(8px, 2vw, 14px);
+  padding: 10px;
   border: 3px solid;
   border-color: #fff #555 #555 #fff;
   overflow: hidden;
@@ -126,9 +112,9 @@ body::before {
   background: #000;
   color: #ffd6ff;
   border: 2px dashed #ff00cc;
-  padding: clamp(8px, 2vw, 12px);
-  margin-bottom: clamp(8px, 2vw, 12px);
-  font-size: clamp(1.05rem, 4.7vw, 1.9rem);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: clamp(1.1rem, 3.5vw, 1.8rem);
   text-align: center;
   line-height: 1.1;
   text-shadow: 2px 2px #6d00ff;
@@ -142,7 +128,7 @@ body::before {
   place-items: center;
   background: #111;
   border: 3px solid #000;
-  padding: clamp(6px, 2vw, 10px);
+  padding: 8px;
 }
 
 .cat-frame {
@@ -156,32 +142,32 @@ body::before {
 }
 
 .cat-motion {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   display: grid;
   place-items: center;
 }
 
 #cat {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   transform-origin: center;
 }
 
 .toolbar {
   flex-shrink: 0;
-  margin-top: clamp(8px, 2vw, 12px);
+  margin-top: 10px;
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 8px;
 }
 
 button {
   min-width: 0;
-  min-height: 42px;
+  min-height: 38px;
   font: inherit;
-  font-size: clamp(.9rem, 2.7vw, 1.25rem);
+  font-size: clamp(.9rem, 2.2vw, 1.15rem);
   border: 3px solid;
   border-color: #fff #555 #555 #fff;
   cursor: pointer;
@@ -200,49 +186,107 @@ button:active {
 .purple { background: #b983ff; }
 .yellow { background: #fff36a; }
 
-.bounce { animation: bounce .45s steps(2) infinite alternate; }
-@keyframes bounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-35px); }
+.bounce {
+  animation: bounce .55s ease-in-out infinite;
 }
 
-.spin { animation: spin 1.1s linear infinite; }
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-38px) scale(1.04); }
+}
+
+.spin {
+  animation: spin 1.1s linear infinite;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-.vhs { animation: vhs .16s steps(2) infinite; }
+.vhs {
+  animation: vhs .13s steps(2) infinite;
+}
+
 @keyframes vhs {
-  from { transform: translateX(-3px); }
-  to { transform: translateX(3px); }
+  0% { transform: translateX(-4px) skewX(-1deg); }
+  100% { transform: translateX(4px) skewX(1deg); }
 }
 
 .flip { transform: scaleX(-1); }
-.deepfried { filter: saturate(320%) contrast(190%) brightness(125%); }
-.party { animation: party .35s steps(2) infinite alternate; }
+
+.deepfried {
+  filter: saturate(340%) contrast(200%) brightness(125%);
+}
+
+.party {
+  animation: party .35s steps(2) infinite alternate;
+}
 
 @keyframes party {
-  from { filter: hue-rotate(0deg) saturate(220%) contrast(130%); }
-  to { filter: hue-rotate(220deg) saturate(360%) contrast(170%); }
+  from { filter: hue-rotate(0deg) saturate(230%) contrast(135%); }
+  to { filter: hue-rotate(220deg) saturate(380%) contrast(175%); }
 }
 
 .pixel {
-  image-rendering: pixelated;
-  width: 70%;
+  animation: pixelPulse 1.2s steps(6) infinite alternate;
+}
+
+@keyframes pixelPulse {
+  0% {
+    width: 100%;
+    height: 100%;
+    image-rendering: auto;
+    filter: none;
+  }
+  25% {
+    width: 90%;
+    height: 90%;
+    image-rendering: pixelated;
+    filter: contrast(120%);
+  }
+  50% {
+    width: 75%;
+    height: 75%;
+    image-rendering: pixelated;
+    filter: contrast(150%) saturate(140%);
+  }
+  75% {
+    width: 55%;
+    height: 55%;
+    image-rendering: pixelated;
+    filter: contrast(180%) saturate(180%);
+  }
+  100% {
+    width: 35%;
+    height: 35%;
+    image-rendering: pixelated;
+    filter: contrast(220%) saturate(220%);
+  }
 }
 
 @media (max-width: 760px) {
+  body {
+    padding: 14px;
+  }
+
+  .window {
+    width: 92vw;
+    height: 86dvh;
+  }
+
   .toolbar {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 430px) {
-  body { padding: 7px; }
+  body {
+    padding: 12px;
+  }
 
   .window {
-    width: calc(100vw - 14px);
-    height: calc(100dvh - 14px);
+    width: calc(100vw - 24px);
+    height: calc(100dvh - 24px);
   }
 
   .titlebar {
@@ -255,12 +299,12 @@ button:active {
   }
 
   .toolbar {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 6px;
   }
 
   button {
-    min-height: 38px;
+    min-height: 36px;
   }
 }
 </style>
@@ -289,7 +333,7 @@ button:active {
     </div>
 
     <div class="toolbar">
-      <button class="pink" onclick="randomCat()">new cat</button>
+      <button class="pink" onclick="randomCat()">new</button>
       <button class="blue" onclick="setMotion('bounce')">bounce</button>
       <button class="orange" onclick="setMotion('spin')">spin</button>
       <button class="purple" onclick="toggleCat('flip')">flip</button>
@@ -297,7 +341,6 @@ button:active {
       <button class="green" onclick="toggleCat('party')">party</button>
       <button class="blue" onclick="setMotion('vhs')">vhs</button>
       <button class="pink" onclick="toggleCat('pixel')">pixel</button>
-      <button class="orange" onclick="resetEffects()">reset</button>
     </div>
   </section>
 </main>
@@ -361,12 +404,6 @@ function setMotion(effect) {
 
 function toggleCat(effect) {
   cat.classList.toggle(effect);
-}
-
-function resetEffects() {
-  motion.className = "cat-motion";
-  cat.className = "";
-  currentMotion = "";
 }
 
 randomCat();
