@@ -1,273 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Silly Cat</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sillycat.exe</title>
 
 <style>
+* { box-sizing: border-box; }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+html, body {
+  margin: 0;
+  min-height: 100%;
 }
 
-body{
+body {
+  min-height: 100vh;
+  font-family: "Courier New", monospace;
+  color: #111;
+  display: grid;
+  place-items: center;
+  padding: 18px;
 
-    font-family:Inter,sans-serif;
-
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    overflow:hidden;
-
-    background:
-    radial-gradient(circle at 20% 20%,#ff4fd8 0,#0000 28%),
-    radial-gradient(circle at 80% 25%,#00d0ff 0,#0000 32%),
-    radial-gradient(circle at 30% 80%,#ffd84d 0,#0000 26%),
-    radial-gradient(circle at 90% 90%,#7d4dff 0,#0000 32%),
-    #17143b;
-
+  background-color: #080822;
+  background-image:
+    radial-gradient(#ffffff 1px, transparent 1px),
+    radial-gradient(#8df7ff 1px, transparent 1px),
+    linear-gradient(45deg, transparent 48%, rgba(255,255,255,.08) 49%, rgba(255,255,255,.08) 51%, transparent 52%);
+  background-size: 18px 18px, 36px 36px, 72px 72px;
+  background-position: 0 0, 9px 9px, 0 0;
+  image-rendering: pixelated;
 }
 
-body::before{
-
-content:"";
-
-position:fixed;
-
-inset:0;
-
-background:
-linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
-
-background-size:40px 40px;
-
-pointer-events:none;
-
+.window {
+  width: min(760px, 94vw);
+  border: 3px solid #000;
+  background: #c0c0c0;
+  box-shadow:
+    8px 8px 0 #000,
+    12px 12px 0 rgba(255, 0, 180, .65);
 }
 
-main{
-
-width:min(900px,92vw);
-
-background:#101018;
-
-border:2px solid #2b2f52;
-
-border-radius:18px;
-
-box-shadow:
-0 25px 70px rgba(0,0,0,.55);
-
-padding:40px;
-
+.titlebar {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px 0 10px;
+  color: white;
+  font-weight: bold;
+  background: linear-gradient(90deg, #001f8f, #b000ff, #ff8a00);
+  border-bottom: 3px solid #000;
 }
 
-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:30px;
-
+.title {
+  text-shadow: 2px 2px #000;
 }
 
-.logo{
-
-font-size:2.5rem;
-
-font-weight:800;
-
-color:white;
-
+.buttons {
+  display: flex;
+  gap: 5px;
 }
 
-.logo span{
-
-color:#ffb400;
-
+.btn {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  background: #c0c0c0;
+  color: #000;
+  border: 2px solid;
+  border-color: #fff #555 #555 #fff;
+  font-size: 14px;
+  line-height: 1;
 }
 
-.tag{
-
-color:#8aa0ff;
-
-font-size:.9rem;
-
+.content {
+  padding: 14px;
+  border: 3px solid;
+  border-color: #fff #555 #555 #fff;
 }
 
-img{
-
-display:block;
-
-width:100%;
-
-border-radius:12px;
-
-margin-bottom:25px;
-
-background:#222;
-
+.banner {
+  background: #000;
+  color: #00ff66;
+  border: 2px dashed #ff00cc;
+  padding: 10px;
+  margin-bottom: 14px;
+  font-size: clamp(1.1rem, 4vw, 2rem);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.quote{
-
-font-size:1.3rem;
-
-text-align:center;
-
-color:#d9d9ff;
-
-font-style:italic;
-
+.catbox {
+  background: #111;
+  border: 3px solid #000;
+  padding: 10px;
 }
 
-footer{
-
-margin-top:30px;
-
-display:flex;
-
-justify-content:center;
-
+img {
+  display: block;
+  width: 100%;
+  max-height: 58vh;
+  object-fit: contain;
+  background: #000;
+  border: 2px solid #fff;
 }
 
-button{
-
-padding:12px 20px;
-
-font-size:1rem;
-
-font-weight:600;
-
-border:none;
-
-border-radius:10px;
-
-cursor:pointer;
-
-background:#ffb400;
-
-transition:.2s;
-
+.quote {
+  margin: 12px 0 0;
+  padding: 10px;
+  background: #ffff99;
+  border: 2px solid #000;
+  font-size: clamp(.95rem, 3vw, 1.2rem);
+  text-align: center;
 }
 
-button:hover{
-
-transform:translateY(-2px);
-
+.toolbar {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-@media(max-width:700px){
-
-main{
-
-padding:24px;
-
+button, a {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #000;
+  background: #ffcc00;
+  border: 3px solid;
+  border-color: #fff #555 #555 #fff;
+  padding: 8px 12px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.logo{
-
-font-size:2rem;
-
+button:active, a:active {
+  border-color: #555 #fff #fff #555;
+  transform: translate(2px, 2px);
 }
 
-.quote{
-
-font-size:1.05rem;
-
+.marquee {
+  margin-top: 12px;
+  overflow: hidden;
+  background: #000080;
+  color: white;
+  border: 2px solid #000;
+  padding: 6px;
+  white-space: nowrap;
 }
 
+.marquee span {
+  display: inline-block;
+  animation: scroll 12s linear infinite;
 }
 
+@keyframes scroll {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
 </style>
-
 </head>
 
 <body>
+  <main class="window">
+    <div class="titlebar">
+      <div class="title">sillycat.exe</div>
+      <div class="buttons">
+        <div class="btn">_</div>
+        <div class="btn">□</div>
+        <div class="btn">×</div>
+      </div>
+    </div>
 
-<main>
+    <section class="content">
+      <div class="banner">★ silly cat zone ★</div>
 
-<header>
+      <div class="catbox">
+        <img id="cat" alt="random cat gif">
+        <p class="quote" id="quote"></p>
+      </div>
 
-<div class="logo">
-<span>■</span> silly cat
-</div>
+      <div class="toolbar">
+        <button onclick="randomCat()">new cat</button>
+        <a href="/">home</a>
+      </div>
 
-<div class="tag">
-daily internet nonsense
-</div>
-
-</header>
-
-<img id="cat">
-
-<p class="quote" id="quote"></p>
-
-<footer>
-
-<button onclick="randomCat()">
-Another Cat
-</button>
-
-</footer>
-
-</main>
+      <div class="marquee">
+        <span>☆ welcome to the silly cat zone ☆ best viewed on a tiny glowing screen ☆ no refunds ☆</span>
+      </div>
+    </section>
+  </main>
 
 <script>
-
-const cats=[
-
-{
-gif:"https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
-quote:"the council has decided: more snacks."
-},
-
-{
-gif:"https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
-quote:"today is legally a cat day."
-},
-
-{
-gif:"https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
-quote:"certified little menace."
-},
-
-{
-gif:"https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif",
-quote:"absolutely no thoughts."
-}
-
+const cats = [
+  {
+    gif: "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
+    quote: "the council has decided: more snacks."
+  },
+  {
+    gif: "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
+    quote: "no thoughts. only vibes."
+  },
+  {
+    gif: "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
+    quote: "tiny criminal detected."
+  },
+  {
+    gif: "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif",
+    quote: "professional internet creature."
+  }
 ];
 
-function randomCat(){
-
-const c=cats[Math.floor(Math.random()*cats.length)];
-
-document.getElementById("cat").src=c.gif;
-
-document.getElementById("quote").textContent=c.quote;
-
+function randomCat() {
+  const pick = cats[Math.floor(Math.random() * cats.length)];
+  document.getElementById("cat").src = pick.gif;
+  document.getElementById("quote").textContent = `"${pick.quote}"`;
 }
 
 randomCat();
-
 </script>
-
 </body>
 </html>
