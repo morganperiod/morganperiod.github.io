@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sillycat.exe</title>
+<title>morgan-sillycat.exe</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
@@ -25,41 +25,33 @@ body {
   color: #111;
 
   background-image:
-    url("https://gifcity.carrd.co/assets/images/gallery62/e626fe5a.png?v=3fc8f5cd"),
+    radial-gradient(#fff 1px, transparent 1px),
+    radial-gradient(#ffccff 1px, transparent 1px),
     url("https://gifcity.carrd.co/assets/images/gallery62/9cee5530.gif?v=3fc8f5cd");
-  background-repeat: repeat, repeat;
-  background-size: auto, auto;
-  animation: fallingStars 18s linear infinite;
+  background-repeat: repeat, repeat, repeat;
+  background-size: 22px 22px, 37px 37px, auto;
+  animation: fallingStars 14s linear infinite;
 }
 
 @keyframes fallingStars {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 0 900px, 0 0; }
+  from { background-position: 0 0, 12px 12px, 0 0; }
+  to { background-position: 0 900px, 12px 1200px, 0 0; }
 }
 
 .window {
   width: min(760px, 94vw);
   border: 3px solid #000;
   background: #c0c0c0;
-  box-shadow:
-    8px 8px 0 #000,
-    14px 14px 0 #ff00ff;
+  box-shadow: 8px 8px 0 #000, 14px 14px 0 #ff00ff;
   animation: rgbShadow 3s linear infinite;
 }
 
 @keyframes rgbShadow {
-  0% {
-    box-shadow: 8px 8px 0 #000, 14px 14px 0 #ff00ff;
-  }
-  33% {
-    box-shadow: 8px 8px 0 #000, 14px 14px 0 #00ffff;
-  }
-  66% {
-    box-shadow: 8px 8px 0 #000, 14px 14px 0 #ffff00;
-  }
-  100% {
-    box-shadow: 8px 8px 0 #000, 14px 14px 0 #ff00ff;
-  }
+  0% { box-shadow: 8px 8px 0 #000, 14px 14px 0 #ff00ff; }
+  25% { box-shadow: 8px 8px 0 #000, 14px 14px 0 #00ffff; }
+  50% { box-shadow: 8px 8px 0 #000, 14px 14px 0 #ffff00; }
+  75% { box-shadow: 8px 8px 0 #000, 14px 14px 0 #00ff66; }
+  100% { box-shadow: 8px 8px 0 #000, 14px 14px 0 #ff00ff; }
 }
 
 .titlebar {
@@ -71,12 +63,10 @@ body {
   color: white;
   background: linear-gradient(90deg, #001f8f, #b000ff, #ff8a00);
   border-bottom: 3px solid #000;
-  font-size: .75rem;
+  font-size: .7rem;
 }
 
-.title {
-  text-shadow: 2px 2px #000;
-}
+.title { text-shadow: 2px 2px #000; }
 
 .buttons {
   display: flex;
@@ -106,11 +96,21 @@ body {
   color: #00ff66;
   border: 2px dashed #ff00cc;
   padding: 12px;
-  margin-bottom: 14px;
-  font-size: clamp(.8rem, 3vw, 1.3rem);
+  margin-bottom: 10px;
+  font-size: clamp(.8rem, 3vw, 1.25rem);
   text-align: center;
   line-height: 1.7;
-  text-shadow: 2px 2px #003b18;
+}
+
+.login {
+  background: #000080;
+  color: #fff;
+  border: 2px solid #000;
+  padding: 10px;
+  margin-bottom: 14px;
+  font-size: clamp(.55rem, 2vw, .75rem);
+  line-height: 1.8;
+  text-align: center;
 }
 
 .catbox {
@@ -166,77 +166,36 @@ button:active {
 .orange { background: #ffb347; }
 .purple { background: #b983ff; }
 
-.marquee {
-  margin-top: 12px;
-  overflow: hidden;
-  background: #000080;
-  color: white;
-  border: 2px solid #000;
-  padding: 8px;
-  white-space: nowrap;
-  font-size: .65rem;
-}
-
-.marquee span {
-  display: inline-block;
-  animation: scroll 12s linear infinite;
-}
-
-@keyframes scroll {
-  from { transform: translateX(100%); }
-  to { transform: translateX(-100%); }
-}
-
-/* silly effects */
-.bounce {
-  animation: bounce .55s infinite alternate;
-}
-
+.bounce { animation: bounce .55s infinite alternate; }
 @keyframes bounce {
   from { transform: translateY(0); }
   to { transform: translateY(-25px); }
 }
 
-.shake {
-  animation: shake .12s infinite;
-}
-
-@keyframes shake {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(6px, -4px) rotate(2deg); }
-  50% { transform: translate(-5px, 5px) rotate(-2deg); }
-  75% { transform: translate(4px, 3px) rotate(1deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-.spin {
-  animation: spin 1.2s linear infinite;
-}
-
+.spin { animation: spin 1.2s linear infinite; }
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-.flip {
-  transform: scaleX(-1);
-}
+.flip { transform: scaleX(-1); }
 
 .deepfried {
   filter: saturate(280%) contrast(180%) brightness(120%);
 }
 
+.party {
+  animation: party .35s infinite alternate;
+}
+
+@keyframes party {
+  from { filter: hue-rotate(0deg) saturate(200%); }
+  to { filter: hue-rotate(180deg) saturate(300%); }
+}
+
 @media(max-width: 600px) {
-  .titlebar {
-    font-size: .55rem;
-  }
-
-  .toolbar {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  button {
-    font-size: .55rem;
-  }
+  .titlebar { font-size: .5rem; }
+  .toolbar { grid-template-columns: 1fr 1fr; }
+  button { font-size: .52rem; }
 }
 </style>
 </head>
@@ -244,7 +203,7 @@ button:active {
 <body>
   <main class="window">
     <div class="titlebar">
-      <div class="title">sillycat.exe</div>
+      <div class="title">morgan-sillycat.exe</div>
       <div class="buttons">
         <div class="btn">_</div>
         <div class="btn">□</div>
@@ -254,6 +213,7 @@ button:active {
 
     <section class="content">
       <div class="banner">★ silly cat zone ★</div>
+      <div class="login" id="loginText"></div>
 
       <div class="catbox">
         <img id="cat" alt="random cat gif">
@@ -263,19 +223,28 @@ button:active {
       <div class="toolbar">
         <button class="pink" onclick="randomCat()">new cat</button>
         <button class="blue" onclick="toggleEffect('bounce')">bounce</button>
-        <button class="green" onclick="toggleEffect('shake')">shake</button>
         <button class="orange" onclick="toggleEffect('spin')">spin</button>
         <button class="purple" onclick="toggleEffect('flip')">flip</button>
         <button class="pink" onclick="toggleEffect('deepfried')">deep fry</button>
-      </div>
-
-      <div class="marquee">
-        <span>☆ welcome to the silly cat zone ☆ best viewed on a haunted computer ☆ no refunds ☆</span>
+        <button class="green" onclick="toggleEffect('party')">party mode</button>
       </div>
     </section>
   </main>
 
 <script>
+const params = new URLSearchParams(window.location.search);
+
+const user = params.get("user") || "guest";
+const key = params.get("key") || "";
+
+const loginText = document.getElementById("loginText");
+
+if (key) {
+  loginText.textContent = `Logged in as: ${user} — Enjoy :3`;
+} else {
+  loginText.textContent = `Logged in as: guest — Enjoy :3`;
+}
+
 const cats = [
   {
     gif: "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
