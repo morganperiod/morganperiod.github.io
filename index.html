@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Cat</title>
+</head>
+<body>
+<script>
+const gifs = [
+  "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
+  "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
+  "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
+  "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif"
+];
+
+window.location.href = gifs[Math.floor(Math.random() * gifs.length)];
+</script>
+</body>
+</html>
