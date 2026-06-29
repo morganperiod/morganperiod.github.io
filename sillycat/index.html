@@ -148,11 +148,25 @@ body {
   place-items: center;
 }
 
-#cat {
+#cat,
+#pixelCanvas {
   width: 100%;
   height: 100%;
   object-fit: contain;
   transform-origin: center;
+}
+
+#pixelCanvas {
+  display: none;
+  image-rendering: pixelated;
+}
+
+.pixel-mode #cat {
+  display: none;
+}
+
+.pixel-mode #pixelCanvas {
+  display: block;
 }
 
 .toolbar {
@@ -187,12 +201,15 @@ button:active {
 .yellow { background: #fff36a; }
 
 .bounce {
-  animation: bounce .55s ease-in-out infinite;
+  animation: bounce .42s cubic-bezier(.2, .9, .25, 1.35) infinite;
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-38px) scale(1.04); }
+  0%   { transform: translateY(0) scaleX(1.06) scaleY(.92); }
+  20%  { transform: translateY(-12px) scaleX(.98) scaleY(1.04); }
+  55%  { transform: translateY(-48px) scaleX(1) scaleY(1); }
+  80%  { transform: translateY(-12px) scaleX(.98) scaleY(1.04); }
+  100% { transform: translateY(0) scaleX(1.08) scaleY(.9); }
 }
 
 .spin {
@@ -201,15 +218,6 @@ button:active {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-.vhs {
-  animation: vhs .13s steps(2) infinite;
-}
-
-@keyframes vhs {
-  0% { transform: translateX(-4px) skewX(-1deg); }
-  100% { transform: translateX(4px) skewX(1deg); }
 }
 
 .flip { transform: scaleX(-1); }
@@ -227,47 +235,8 @@ button:active {
   to { filter: hue-rotate(220deg) saturate(380%) contrast(175%); }
 }
 
-.pixel {
-  animation: pixelPulse 1.2s steps(6) infinite alternate;
-}
-
-@keyframes pixelPulse {
-  0% {
-    width: 100%;
-    height: 100%;
-    image-rendering: auto;
-    filter: none;
-  }
-  25% {
-    width: 90%;
-    height: 90%;
-    image-rendering: pixelated;
-    filter: contrast(120%);
-  }
-  50% {
-    width: 75%;
-    height: 75%;
-    image-rendering: pixelated;
-    filter: contrast(150%) saturate(140%);
-  }
-  75% {
-    width: 55%;
-    height: 55%;
-    image-rendering: pixelated;
-    filter: contrast(180%) saturate(180%);
-  }
-  100% {
-    width: 35%;
-    height: 35%;
-    image-rendering: pixelated;
-    filter: contrast(220%) saturate(220%);
-  }
-}
-
 @media (max-width: 760px) {
-  body {
-    padding: 14px;
-  }
+  body { padding: 14px; }
 
   .window {
     width: 92vw;
@@ -280,18 +249,14 @@ button:active {
 }
 
 @media (max-width: 430px) {
-  body {
-    padding: 12px;
-  }
+  body { padding: 12px; }
 
   .window {
     width: calc(100vw - 24px);
     height: calc(100dvh - 24px);
   }
 
-  .titlebar {
-    height: 34px;
-  }
+  .titlebar { height: 34px; }
 
   .win-btn {
     width: 20px;
@@ -303,9 +268,7 @@ button:active {
     gap: 6px;
   }
 
-  button {
-    min-height: 36px;
-  }
+  button { min-height: 36px; }
 }
 </style>
 </head>
@@ -325,9 +288,10 @@ button:active {
     <div class="banner" id="loginText"></div>
 
     <div class="catbox">
-      <div class="cat-frame">
+      <div class="cat-frame" id="catFrame">
         <div class="cat-motion" id="catMotion">
           <img id="cat" alt="random cat gif">
+          <canvas id="pixelCanvas"></canvas>
         </div>
       </div>
     </div>
@@ -339,8 +303,8 @@ button:active {
       <button class="purple" onclick="toggleCat('flip')">flip</button>
       <button class="yellow" onclick="toggleCat('deepfried')">fry</button>
       <button class="green" onclick="toggleCat('party')">party</button>
-      <button class="blue" onclick="setMotion('vhs')">vhs</button>
-      <button class="pink" onclick="toggleCat('pixel')">pixel</button>
+      <button class="pink" onclick="togglePixel()">pixel</button>
+      <button class="orange" onclick="resetEffects()">reset</button>
     </div>
   </section>
 </main>
@@ -368,9 +332,14 @@ const cats = [
 
 const cat = document.getElementById("cat");
 const motion = document.getElementById("catMotion");
+const pixelCanvas = document.getElementById("pixelCanvas");
+const pixelCtx = pixelCanvas.getContext("2d");
 
 let lastCat = "";
 let currentMotion = "";
+let pixelOn = false;
+let pixelLoop = null;
+let pixelStart = 0;
 
 function cleanText(value) {
   if (!value) return "";
@@ -387,11 +356,12 @@ function randomCat() {
   }
 
   lastCat = pick;
+  cat.crossOrigin = "anonymous";
   cat.src = pick;
 }
 
 function setMotion(effect) {
-  motion.classList.remove("bounce", "spin", "vhs");
+  motion.classList.remove("bounce", "spin");
 
   if (currentMotion === effect) {
     currentMotion = "";
@@ -404,6 +374,77 @@ function setMotion(effect) {
 
 function toggleCat(effect) {
   cat.classList.toggle(effect);
+  pixelCanvas.classList.toggle(effect);
+}
+
+function togglePixel() {
+  pixelOn = !pixelOn;
+  motion.classList.toggle("pixel-mode", pixelOn);
+
+  if (pixelOn) {
+    startPixelLoop();
+  } else {
+    stopPixelLoop();
+  }
+}
+
+function startPixelLoop() {
+  stopPixelLoop();
+  pixelStart = performance.now();
+
+  function draw(now) {
+    if (!pixelOn) return;
+
+    const frame = cat.getBoundingClientRect();
+    const wave = (Math.sin((now - pixelStart) / 450) + 1) / 2;
+    const pixelSize = Math.round(10 + wave * 38);
+
+    const lowW = Math.max(8, Math.round(frame.width / pixelSize));
+    const lowH = Math.max(8, Math.round(frame.height / pixelSize));
+
+    pixelCanvas.width = frame.width;
+    pixelCanvas.height = frame.height;
+
+    pixelCtx.imageSmoothingEnabled = false;
+    pixelCtx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
+
+    const temp = document.createElement("canvas");
+    temp.width = lowW;
+    temp.height = lowH;
+
+    const tempCtx = temp.getContext("2d");
+    tempCtx.imageSmoothingEnabled = false;
+
+    try {
+      tempCtx.drawImage(cat, 0, 0, lowW, lowH);
+      pixelCtx.drawImage(temp, 0, 0, lowW, lowH, 0, 0, pixelCanvas.width, pixelCanvas.height);
+    } catch (error) {
+      pixelOn = false;
+      motion.classList.remove("pixel-mode");
+      stopPixelLoop();
+      return;
+    }
+
+    pixelLoop = requestAnimationFrame(draw);
+  }
+
+  pixelLoop = requestAnimationFrame(draw);
+}
+
+function stopPixelLoop() {
+  if (pixelLoop) {
+    cancelAnimationFrame(pixelLoop);
+    pixelLoop = null;
+  }
+}
+
+function resetEffects() {
+  motion.className = "cat-motion";
+  cat.className = "";
+  pixelCanvas.className = "";
+  currentMotion = "";
+  pixelOn = false;
+  stopPixelLoop();
 }
 
 randomCat();
