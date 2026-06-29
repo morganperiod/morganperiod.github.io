@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Silly Cat</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, sans-serif;
+      color: white;
+      background-color: #080818;
+      background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+      padding: 20px;
+    }
+
+    main {
+      width: min(92vw, 520px);
+      text-align: center;
+      background: rgba(10, 10, 35, 0.82);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-radius: 24px;
+      padding: clamp(18px, 5vw, 32px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px);
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2rem, 8vw, 4rem);
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      max-height: 55vh;
+      object-fit: contain;
+      border-radius: 18px;
+      background: #111;
+    }
+
+    p {
+      margin: 18px 0 0;
+      font-size: clamp(1rem, 4vw, 1.35rem);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>🐱 silly cat</h1>
+    <img id="catGif" alt="Random cat GIF">
+    <p id="quote"></p>
+  </main>
+
+  <script>
+    const cats = [
+      {
+        gif: "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
+        quote: "tiny paws, massive chaos."
+      },
+      {
+        gif: "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
+        quote: "the council has decided: more snacks."
+      },
+      {
+        gif: "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
+        quote: "no thoughts, only meow."
+      },
+      {
+        gif: "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif",
+        quote: "professional button pusher."
+      }
+    ];
+
+    const pick = cats[Math.floor(Math.random() * cats.length)];
+
+    document.getElementById("catGif").src = pick.gif;
+    document.getElementById("quote").textContent = pick.quote;
+  </script>
+</body>
+</html>
